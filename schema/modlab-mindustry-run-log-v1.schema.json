@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://modlabguides.online/schemas/modlab-mindustry-run-log-v1.schema.json",
+  "title": "modlab-last-run.json",
+  "description": "Single-run result from ModLab Homing Lab, the Mindustry worked example contributed to Universal Modder.\nhttps://modlabguides.online/workshop/mindustry-homing",
+  "$comment": "MIT licensed; https://modlabguides.online/tools/run-log-assets/LICENSE. Documents the 0.1.0 log format. This validates structure and value ranges. Hit/shot relationships and simulation timing consistency are checked by the run log viewer, not this schema.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "game",
+    "simulationTicks",
+    "durationSeconds",
+    "shots",
+    "hits",
+    "finished"
+  ],
+  "properties": {
+    "game": {
+      "description": "Game that this specific lab runs in.",
+      "type": "string",
+      "const": "Mindustry"
+    },
+    "build": {
+      "description": "Mindustry build reported by the game.",
+      "type": "string"
+    },
+    "modVersion": {
+      "description": "Version of ModLab Homing Lab that recorded the run.",
+      "type": "string"
+    },
+    "simulationTicks": {
+      "description": "Elapsed simulation ticks; the lab uses 60 ticks per simulation second.",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1.7976931348623157e308
+    },
+    "durationSeconds": {
+      "description": "Elapsed simulation seconds; may be zero for an empty incomplete run.",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1.7976931348623157e308
+    },
+    "method": {
+      "description": "Description of the controlled arena and counting method.",
+      "type": "string"
+    },
+    "shots": {
+      "description": "Turret totalShots counts, ordered as baseline then homing.",
+      "$ref": "#/definitions/laneCounts"
+    },
+    "hits": {
+      "description": "Target damage-event counts, ordered as baseline then homing. The viewer checks that hits do not exceed shots.",
+      "$ref": "#/definitions/laneCounts"
+    },
+    "finished": {
+      "description": "Whether the run reached the lab's 30-second simulation limit.",
+      "type": "boolean"
+    },
+    "observer": {
+      "description": "Observer unit type used by the arena helper.",
+      "type": "string"
+    },
+    "observerDead": {
+      "description": "Whether the observer died during this run.",
+      "type": "boolean"
+    }
+  },
+  "definitions": {
+    "laneCounts": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9007199254740991
+      }
+    }
+  }
+}
