@@ -35,6 +35,10 @@ if (typeof document !== 'undefined') {
     runs = [];
     el('result').hidden = true;
     el('csv').disabled = true;
+    el('csv-preview').disabled = true;
+    el('csv-preview').setAttribute('aria-expanded', 'false');
+    el('csv-panel').hidden = true;
+    el('csv-output').value = '';
     text('status', message);
     el('status').classList.add('error');
   }
@@ -54,6 +58,8 @@ if (typeof document !== 'undefined') {
     text('build', `Mindustry ${build}`);
     text('warning', `${run.finished ? '' : 'Incomplete run: do not treat these counts as a finished comparison. '}${run.observerDead === true ? 'The observer died during this run. ' : ''}Fixed targets and aim. This is a steering demonstration, not a normal-play benchmark.`);
     el('csv').disabled = false;
+    el('csv-preview').disabled = false;
+    if (!el('csv-panel').hidden) el('csv-output').value = resultCsv(run);
   }
   function load(input, label) {
     runs = parseLog(input);
@@ -89,13 +95,25 @@ if (typeof document !== 'undefined') {
   });
   el('sample').addEventListener('click', sample);
   el('run').addEventListener('change', render);
+  el('csv-preview').addEventListener('click', () => {
+    const run = runs[Number(el('run').value)];
+    if (!run) return;
+    el('csv-panel').hidden = !el('csv-panel').hidden;
+    el('csv-preview').setAttribute('aria-expanded', String(!el('csv-panel').hidden));
+    el('csv-output').value = el('csv-panel').hidden ? '' : resultCsv(run);
+  });
+  el('csv-select').addEventListener('click', () => {
+    el('csv-output').focus();
+    el('csv-output').select();
+  });
   el('csv').addEventListener('click', () => {
     const run = runs[Number(el('run').value)];
     if (!run) return;
     const url = URL.createObjectURL(new Blob([resultCsv(run)], { type: 'text/csv;charset=utf-8' }));
     const a = document.createElement('a');
-    a.href = url; a.download = 'modlab-run-result.csv'; a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    a.href = url; a.download = 'modlab-run-result.csv';
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 30_000);
   });
   sample();
 }

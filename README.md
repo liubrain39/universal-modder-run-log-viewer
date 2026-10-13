@@ -1,6 +1,6 @@
 # Universal Modder Run Log Viewer
 
-A free, independent browser companion for the Mindustry homing lab. Inspect a saved JSON log, compare the two lanes and export the selected run as CSV.
+A free, independent browser companion for the Mindustry homing lab. Inspect a saved JSON log, compare the two lanes, preview CSV and export the selected run.
 
 [Open the live viewer](https://modlabguides.online/tools/universal-modder-run-log-viewer) · [Reproduce the free Mindustry example](https://modlabguides.online/workshop/mindustry-homing)
 
@@ -37,11 +37,12 @@ Each run lasted approximately 1,800 simulation ticks, or 30 simulation seconds. 
 - The parser checks count types and ranges, hits not exceeding shots, finite non-negative timing, timing consistency and the `finished` flag.
 - Zero shots have no hit percentage. An incomplete run remains marked incomplete.
 - CSV contains only the currently selected run. The viewer does not authenticate the origin of an uploaded log.
+- View CSV shows the same selected-run data directly on the page. Select CSV text lets you copy it with your browser's normal copy command when downloads are unavailable in an embedded browser. The preview updates when the selected run changes and clears when a log is rejected.
 
 The [draft-07 single-run JSON schema](schema/modlab-mindustry-run-log-v1.schema.json) is for editors and scripts. It describes the raw `modlab-last-run.json` object, not the complete two-run bundle. The viewer uses its own parser; cross-field count and timing relationships are checked by that parser, rather than by the schema.
 
 ## Source and license
 
-This is the original standalone implementation also published in the [Hugging Face Space](https://huggingface.co/spaces/liuminsheng3/universal-modder-run-log-viewer). `app.mjs`, `index.html` and `sample-data.json` are preserved byte for byte from that implementation.
+This standalone implementation started with the original [Hugging Face Space](https://huggingface.co/spaces/liuminsheng3/universal-modder-run-log-viewer). Commit `f389ccc` preserves that initial implementation. The current HTML and JavaScript add a selected-run CSV preview for embedded browsers; the recorded sample data and parser rules are unchanged. Older published ZIPs remain separate releases.
 
 ModLab maintains this project with AI assistance. It is independent of the [Universal Modder](https://github.com/rehan-remade/universal-modder) and [Mindustry](https://github.com/Anuken/Mindustry) maintainers. The source, authored sample metadata and schema use the MIT license. No game executable, game assets or private website template source is included. The game retains its own license.
